@@ -1,0 +1,1045 @@
+{
+  "info": {
+    "_postman_id": "9ca3e1fa-e7e0-4f3d-ba49-93fb19df6835",
+    "name": "Tarefa Módulo 13 - Teste de API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52037398",
+    "_collection_link": "https://go.postman.co/collection/52037398-9ca3e1fa-e7e0-4f3d-ba49-93fb19df6835?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Autenticação",
+      "item": [
+        {
+          "name": "Login com usuário admin",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Retorna dados do usuário no body\", function () {\r",
+                  "  const json = pm.response.json();\r",
+                  "\r",
+                  "  pm.expect(json).to.be.an(\"object\");\r",
+                  "  pm.expect(json).to.have.property(\"id\");\r",
+                  "  pm.expect(json).to.have.property(\"name\");\r",
+                  "  pm.expect(json).to.have.property(\"email\");\r",
+                  "});\r",
+                  "\r",
+                  "const tokenGerado = pm.response.json().token;\r",
+                  "pm.environment.set(\"token\", tokenGerado);\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"admin@biblioteca.com\",\r\n  \"password\": \"admin123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}login",
+              "host": [
+                "{{baseUrl}}login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login com usuário padrão",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Retorna dados do usuário no body\", function () {\r",
+                  "  const json = pm.response.json();\r",
+                  "\r",
+                  "  pm.expect(json).to.be.an(\"object\");\r",
+                  "  pm.expect(json).to.have.property(\"id\");\r",
+                  "  pm.expect(json).to.have.property(\"name\");\r",
+                  "  pm.expect(json).to.have.property(\"email\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"Itzel.Murphy55@yahoo.com\",\r\n  \"password\": \"senha123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}login",
+              "host": [
+                "{{baseUrl}}login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Usuários",
+      "item": [
+        {
+          "name": "Cadastrar Usuario",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"O status code deve ser 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deve validar a mensagem de suceso\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Usuário criado com sucesso.\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.response.json();\r",
+                  "\r",
+                  "const json = pm.response.json();\r",
+                  "\r",
+                  "pm.environment.set(\"userID\", json.user.id);\r",
+                  "\r",
+                  "console.log(\"userID salvo no Environment:\", json.user.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{$randomFullName}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"senha123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}users",
+              "host": [
+                "{{baseUrl}}users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Usuários",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar a propriedade users\", function () {\r",
+                  "    pm.expect(pm.response.json()).to.have.property(\"users\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "{{baseUrl}}users",
+              "host": [
+                "{{baseUrl}}users"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Alterar Usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Validar mensagem de sucesso\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Usuário atualizado com sucesso.\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Doyle Wisozk\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"novaSenha123\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}users/{{userID}}",
+              "host": [
+                "{{baseUrl}}users"
+              ],
+              "path": [
+                "{{userID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Usuário por ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deve retornar um id\", function () {\r",
+                  "  const json = pm.response.json();\r",
+                  "  pm.expect(json).to.be.an(\"object\");\r",
+                  "  pm.expect(json).to.have.property(\"id\");\r",
+                  "  const userId = Number(pm.environment.get(\"userID\"));\r",
+                  "  pm.expect(json.id).to.eql(userId);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}users/{{userID}}",
+              "host": [
+                "{{baseUrl}}users"
+              ],
+              "path": [
+                "{{userID}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Usuário",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deve validar mensagem de remoção\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Usuário removido com sucesso.\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"{{$randomFullName}}\",\n  \"email\": \"{{$randomEmail}}\",\n  \"password\": \"senha123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}users/{{userID}}",
+              "host": [
+                "{{baseUrl}}users"
+              ],
+              "path": [
+                "{{userID}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Catalogo de Livros",
+      "item": [
+        {
+          "name": "Listar todos os livros disponiveis",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"O status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deve validar a propriedade books\", function () {\r",
+                  "    pm.expect(pm.response.json()).to.have.property('books')\r",
+                  "\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Salvar bookID de um livro disponível\", function () {\r",
+                  "  const json = pm.response.json();\r",
+                  "\r",
+                  "  pm.expect(json).to.have.property(\"books\");\r",
+                  "  pm.expect(json.books).to.be.an(\"array\");\r",
+                  "  pm.expect(json.books.length).to.be.above(0);\r",
+                  "\r",
+                  "  const disponiveis = json.books.filter(b => b.available_copies > 0);\r",
+                  "\r",
+                  "  pm.expect(disponiveis.length, \"Nenhum livro disponível (available_copies > 0)\").to.be.above(0);\r",
+                  "\r",
+                  "  const index = Math.floor(Math.random() * disponiveis.length);\r",
+                  "  const escolhido = disponiveis[index];\r",
+                  "\r",
+                  "  pm.environment.set(\"bookId\", escolhido.id);\r",
+                  "\r",
+                  "  console.log(\"bookId salvo:\", escolhido.id, \"| título:\", escolhido.title);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}books",
+              "host": [
+                "{{baseUrl}}books"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar livros usando filtro",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"O status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "\r",
+                  "pm.test(\"Deve validar se trouxe o livro Harry Potter\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Harry Potter e a Pedra Filosofal\");\r",
+                  "});\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            },
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}books?category=Fantasia&available=true&limit=1&offset=0&orderBy=title&order=ASC",
+              "host": [
+                "{{baseUrl}}books"
+              ],
+              "query": [
+                {
+                  "key": "category",
+                  "value": "Fantasia"
+                },
+                {
+                  "key": "available",
+                  "value": "true"
+                },
+                {
+                  "key": "limit",
+                  "value": "1"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "orderBy",
+                  "value": "title"
+                },
+                {
+                  "key": "order",
+                  "value": "ASC"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reserva de livros - Positivos",
+      "item": [
+        {
+          "name": "Criar nova reserva",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "const json = pm.response.json();\r",
+                  "pm.test(\"Reserva criada com sucesso\", function () {\r",
+                  "pm.expect(json).to.have.property(\"reservation\");\r",
+                  "pm.expect(json.reservation).to.have.property(\"id\");\r",
+                  "pm.environment.set(\"reservationId\", json.reservation.id);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\":{{bookId}}\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}reservations",
+              "host": [
+                "{{baseUrl}}reservations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Reservas",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}reservations?status=active&limit=20&offset=0&orderBy=desc",
+              "host": [
+                "{{baseUrl}}reservations"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "orderBy",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Reserva",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Reserva deve ter sido atualizada\", function () {\r",
+                  "    const jsonData = pm.response.json();\r",
+                  "    pm.expect(jsonData.message).to.eql(\"Observações atualizadas com sucesso.\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"action\": \"update_notes\",\r\n  \"notes\": \"Observações atualizadas sobre a reserva\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}reservations/{{reservationId}}",
+              "host": [
+                "{{baseUrl}}reservations"
+              ],
+              "path": [
+                "{{reservationId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar Reserva",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Mensagem de sucesso deve estar presente\", function () {\r",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Reserva cancelada com sucesso.\");\r",
+                  "    });\r",
+                  "\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}reservations/{{reservationId}}",
+              "host": [
+                "{{baseUrl}}reservations"
+              ],
+              "path": [
+                "{{reservationId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reserva de livros - Negativos",
+      "item": [
+        {
+          "name": "Criar nova reserva - bookID Inexistente",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404\", function () {\r",
+                  "  pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deve retornar mensagem de erro\", function () {\r",
+                  "   pm.expect(pm.response.text()).to.include(\"Livro não encontrado.\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bookId\": 9999\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}reservations",
+              "host": [
+                "{{baseUrl}}reservations"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Reservas - Sem Token",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 401\", function () {\r",
+                  "  pm.expect(pm.response.code).to.be.oneOf([401]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deve retornar mensagem de erro\", function () {\r",
+                  "  const json = pm.response.json();\r",
+                  "  pm.expect(pm.response.text()).to.include(\"Token de acesso necessário\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "accept",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}reservations?status=active&limit=20&offset=0&orderBy=desc",
+              "host": [
+                "{{baseUrl}}reservations"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "active"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                },
+                {
+                  "key": "offset",
+                  "value": "0"
+                },
+                {
+                  "key": "orderBy",
+                  "value": "desc"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Reserva - Sem reservationID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404\", function () {\r",
+                  "  pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deve retornar mensagem de erro\", function () {\r",
+                  "   pm.expect(pm.response.text()).to.include(\"Reserva não encontrada ou não pertence a você.\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"action\": \"update_notes\",\r\n  \"notes\": \"Observações atualizadas sobre a reserva\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}reservations/999",
+              "host": [
+                "{{baseUrl}}reservations"
+              ],
+              "path": [
+                "999"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar Reserva repetida",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 400\", function () {\r",
+                  "    pm.response.to.have.status(400);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Retorna mensagem de reserva já cancelada\", function () {\r",
+                  "    pm.expect(pm.response.json().message).to.eql(\"Não é possível cancelar reserva com status 'cancelled'.\");\r",
+                  "    });\r",
+                  "\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}reservations/{{reservationId}}",
+              "host": [
+                "{{baseUrl}}reservations"
+              ],
+              "path": [
+                "{{reservationId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar Reserva - Sem reservationID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code deve ser 404\", function () {\r",
+                  "  pm.expect(pm.response.code).to.be.oneOf([404]);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Deve retornar mensagem de erro\", function () {\r",
+                  "   pm.expect(pm.response.text()).to.include(\"Reserva não encontrada ou não pertence a você.\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "accept",
+                "value": "*/*"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}reservations/999",
+              "host": [
+                "{{baseUrl}}reservations"
+              ],
+              "path": [
+                "999"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
